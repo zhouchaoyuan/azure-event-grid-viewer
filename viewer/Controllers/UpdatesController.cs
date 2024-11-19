@@ -103,7 +103,6 @@ namespace viewer.Controllers
                 gridEvent.Id,
                 gridEvent.EventType,
                 gridEvent.Subject,
-                gridEvent.EventTime.ToLongTimeString(),
                 jsonContent.ToString());
 
             // Retrieve the validation code and echo back.
@@ -127,7 +126,6 @@ namespace viewer.Controllers
                     details.Id,
                     details.EventType,
                     details.Subject,
-                    details.EventTime.ToLongTimeString(),
                     e.ToString());
             }
 
