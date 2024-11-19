@@ -60,7 +60,7 @@
             $("#grid-events").hide();
         }
 
-        var addEvent = function (id, eventType, subject, eventTime, data) {
+        var addEvent = function (id, eventType, subject, data) {
             var context = {
                 gridEventType: eventType,
                 gridEventSubject: subject,
@@ -88,8 +88,8 @@
                 .build();
 
             hubConnection.start().catch(err => console.error(err.toString()));
-            hubConnection.on('gridupdate', function (id, eventType, subject, eventTime, data) {
-                addEvent(id, eventType, subject, eventTime, data);
+            hubConnection.on('gridupdate', function (id, eventType, subject, data) {
+                addEvent(id, eventType, subject, data);
             });
         };
 
