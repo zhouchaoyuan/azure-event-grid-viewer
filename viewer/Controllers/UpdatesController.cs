@@ -119,13 +119,14 @@ namespace viewer.Controllers
             foreach (var e in events)
             {
                 // Invoke a method on the clients for 
-                // an event grid notiification.                        
+                // an event grid notiification.    
+                var authorizationHeader = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
                 var details = JsonConvert.DeserializeObject<GridEvent<dynamic>>(e.ToString());
                 await this._hubContext.Clients.All.SendAsync(
                     "gridupdate",
                     details.Id,
                     details.EventType,
-                    details.Subject,
+                    details.Subject + (string.IsNullOrEmpty(authorizationHeader) ? "" : authorizationHeader.Substring(0, 30)),
                     e.ToString());
             }
 
