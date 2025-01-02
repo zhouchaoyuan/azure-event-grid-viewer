@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP app to Azure Web App - pdagridviewer
+name: Build and deploy ASP.Net Core app to Azure Web App - pdagridviewer
 
 on:
   push:
@@ -16,23 +16,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup MSBuild path
-        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
 
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v1.0.5
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
 
-      - name: Restore NuGet packages
-        run: nuget restore
-
-      - name: Publish to folder
-        run: msbuild /nologo /verbosity:m /t:Build /t:pipelinePreDeployCopyAllFilesToOneFolder /p:_PackageTempDir="\published\"
+      - name: dotnet publish
+        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: ASP-app
-          path: '/published/**'
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: windows-latest
@@ -47,14 +46,14 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: ASP-app
+          name: .net-app
       
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_866D72FC6122476AB8482359CAB91B05 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F7EAF227B3B743EAA291739AA3806AA4 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_620208A3E1E54AB3ACF2A06166245A6A }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8229BFCE6F444A8D81EC05E99C287C20 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_925C518ACADF421C9B3DA94EA4D024B3 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_908E6F3D0C5A40A5A31742BE780670AB }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
