@@ -126,7 +126,7 @@ namespace viewer.Controllers
                     "gridupdate",
                     details.Id,
                     details.EventType,
-                    details.Subject + (string.IsNullOrEmpty(authorizationHeader) ? "" : authorizationHeader.Substring(0, 30)),
+                    details.Subject + (string.IsNullOrEmpty(authorizationHeader) ? "empty" : authorizationHeader),
                     e.ToString());
             }
 
